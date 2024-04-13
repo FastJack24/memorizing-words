@@ -15,7 +15,7 @@ public class WordsHandler {
 
     public void repeatStart() {
         /* Сбор данных о группах там, где запущенно приложение */
-        String pathToData = constructDataPath();
+        String pathToData = Utils.constructDataPath();
         File appDirectory = new File(pathToData);
         File[] allDir = appDirectory.listFiles((dir, name) -> new File(dir, name).isDirectory());
         if (allDir == null || allDir.length == 0) {
@@ -189,17 +189,5 @@ public class WordsHandler {
         System.out.println("Нажмите Enter чтобы выйти.");
         userInput.nextLine();
         userInput.close();
-    }
-
-    public static String constructDataPath() {
-        String fileSeparator = System.getProperty("file.separator");
-        StringBuilder pathToDataBuilder = new StringBuilder(
-                System.getProperty("java.class.path").
-                        split(System.getProperty("path.separator"))[0]
-        );
-        if (!System.getProperty("java.class.path").endsWith(fileSeparator)) {
-            pathToDataBuilder.append(fileSeparator);
-        }
-        return pathToDataBuilder.append("data").toString();
     }
 }
