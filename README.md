@@ -31,7 +31,7 @@
 Для запуска приложения в режиме загрузки нужно подать аргумент при запуске равный 0, для запуска в 
 обычном режиме аргумент подавать не нужно:
     
-    java -classpath <абсолютный путь к папке с программой> Main 0
+    java -classpath <абсолютный путь к папке с программой> com.fastjack.Main 0
 Если вы запускаете программу заново или хотите загрузить новые слова, то старые сохранятся.
 ### Использование приложения
 
@@ -52,7 +52,7 @@
 
 ### Пример работы программы
     andrew@andrew-Lenovo16ACH6:~$ java -classpath 
-    /home/andrew/idea/IdeaProjects/MemorizingWords/target/classes/ Main 0
+    /home/andrew/idea/IdeaProjects/MemorizingWords/target/classes/ com.fastjack.Main 0
     
     Введите aбсолютный путь к папке с файлами формата txt с форматированными словами:
     /home/andrew/Desktop/Words
@@ -69,7 +69,7 @@
     Завершена запись файла /home/andrew/idea/IdeaProjects/MemorizingWords/target/classes/data/Shawshank Redemtion/INFO.txt.
 
     andrew@andrew-Lenovo16ACH6:~$ java -classpath 
-    /home/andrew/idea/IdeaProjects/MemorizingWords/target/classes/ Main
+    /home/andrew/idea/IdeaProjects/MemorizingWords/target/classes/ com.fastjack.Main
     
     ===================
     

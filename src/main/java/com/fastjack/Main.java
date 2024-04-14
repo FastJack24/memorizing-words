@@ -1,3 +1,5 @@
+package com.fastjack;
+
 import java.util.Scanner;
 
 /**
@@ -18,6 +20,11 @@ public class Main {
             System.out.println();
             /* Обработка текстового файла, создание папки и разбиение блоков слов. */
             FileHandler.processFiles(pathToTxtFiles);
+            /* Выход из приложения. */
+            System.exit(0);
+        } else if (args.length != 0 && args[0].equals("1")) {
+            /* Удаление директории с данными */
+            FileHandler.cleanUp();
             /* Выход из приложения. */
             System.exit(0);
         }

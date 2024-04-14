@@ -1,8 +1,31 @@
+package com.fastjack;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class FileHandler {
+
+    public static void processFiles(String filePath) {
+        File currentWorkingDirectory = new File(filePath);
+        File[] txtFiles = currentWorkingDirectory.listFiles((dir, name) -> name.endsWith(".txt"));
+
+        if (txtFiles == null || txtFiles.length == 0) {
+            System.out.println(
+                    "Не было найдено ни одного текстового файла в папке " + filePath + ", попробуйте ещё раз"
+            );
+            return;
+        }
+
+        for (File txtFile : txtFiles) {
+            createTextBlocks(txtFile);
+        }
+        System.out.println("Завершена обработка текстовых файлов слов из директории " + filePath);
+    }
+
     private static void createTextBlocks(File txtFile) {
         /* Обработка пути к приложению и построение пути до разбитых файлов */
         String fileNameNoExtension = txtFile.getName().split("\\.")[0]; // Имя файла без расширения
@@ -134,20 +157,17 @@ public class FileHandler {
         }
     }
 
-    public static void processFiles(String filePath) {
-        File currentWorkingDirectory = new File(filePath);
-        File[] txtFiles = currentWorkingDirectory.listFiles((dir, name) -> name.endsWith(".txt"));
-
-        if (txtFiles == null || txtFiles.length == 0) {
-            System.out.println(
-                    "Не было найдено ни одного текстового файла в папке " + filePath + ", попробуйте ещё раз"
-            );
-            return;
+    public static void cleanUp() {
+        try (Stream<Path> dataPath = Files.walk(Path.of(Utils.constructDataPath()))) {
+            dataPath.sorted(Comparator.reverseOrder()).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    throw new IllegalStateException("Невозможно удалить файл " + path.getFileName().toString(), e);
+                }
+            });
+        } catch (IOException e) {
+            throw new IllegalStateException("Ошибка при попытке очистить директорию с данными", e);
         }
-
-        for (File txtFile : txtFiles) {
-            createTextBlocks(txtFile);
-        }
-        System.out.println("Завершена обработка текстовых файлов слов из директории " + filePath);
     }
 }
