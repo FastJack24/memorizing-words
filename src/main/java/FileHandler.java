@@ -1,18 +1,16 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
 import java.util.*;
 
 public class FileHandler {
     private static void createTextBlocks(File txtFile) {
-        /* Обработка пути к приложению и построение пути до разбитых файлов*/
-        String fileName = txtFile.getName().split("\\.")[0]; // Имя файла без расширения
+        /* Обработка пути к приложению и построение пути до разбитых файлов */
+        String fileNameNoExtension = txtFile.getName().split("\\.")[0]; // Имя файла без расширения
+        String separator = Utils.getFileSeparator();
         StringBuilder appDataDirectoryBuilder = new StringBuilder(Utils.constructDataPath());
 
-        String separator = FileSystems.getDefault().getSeparator();
-        String lineSeparator = System.lineSeparator();
         String dataDirectoryPath = appDataDirectoryBuilder.toString(); // /home/.../appFolder/data
-        String pathToDirectory= appDataDirectoryBuilder.append(separator).append(fileName)
+        String pathToDirectory= appDataDirectoryBuilder.append(separator).append(fileNameNoExtension)
                 .toString(); // /home/.../appFolder/data/DoctorStrange
         String pathToTextBlocks = appDataDirectoryBuilder.append(separator).append("%s")
                 .toString(); // /home/.../appFolder/data/DoctorStrange/%s
@@ -37,13 +35,13 @@ public class FileHandler {
             }
         } catch (FileNotFoundException e) {
             throw new IllegalStateException(
-                    "Не удалось найти файл с именем " + fileName + " в указанной директории", e
+                    "Не удалось найти файл с именем " + txtFile.getName() + " в указанной директории", e
             );
 			/* Крайне маловероятная ошибка, так как до этого был проведен листинг файлов и он точно
 		       существует за исключением ситуации когда пользователь успел удалить его до вызова метода */
         } catch (IOException e) {
             throw new IllegalStateException(
-                    "Произошла ошибка при чтении или закрытии файла с именем " + fileName +
+                    "Произошла ошибка при чтении или закрытии файла с именем " + txtFile.getName() +
                             " в указанной директории, повторите попытку для этого файла", e
             );
         }
@@ -80,10 +78,11 @@ public class FileHandler {
         String fileNameWithBlock = "%s%s.txt"; // Строка для форматирования названия для блока
         int fileBlock = 1; // Номер блока
         SequencedMap<String, Integer> pathsINFOtoNumsINFO = new LinkedHashMap<>();
+        String lineSeparator = System.lineSeparator();
 
         while (!rows.isEmpty()) {
             String textBlockPath = String.format(
-                    pathToTextBlocks, String.format(fileNameWithBlock, fileName, fileBlock)
+                    pathToTextBlocks, String.format(fileNameWithBlock, fileNameNoExtension, fileBlock)
             );
             ArrayList<String> rowsInBlock = rows.pop();
             if (!rowsInBlock.isEmpty()) {
@@ -112,7 +111,7 @@ public class FileHandler {
         /* Создания файла для конфигурирования загрузки папки с блоками INFO.txt */
         if (!pathsINFOtoNumsINFO.isEmpty()) {
             try (FileWriter infoWriter = new FileWriter(
-                    String.format(pathToTextBlocks, "INFO.txt"),
+                    String.format(pathToTextBlocks, Utils.INFO_FILE_NAME),
                     StandardCharsets.UTF_8
             )) {
                 Map.Entry<String, Integer> pathINFO = pathsINFOtoNumsINFO.pollFirstEntry();
