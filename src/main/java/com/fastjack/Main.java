@@ -12,15 +12,13 @@ package com.fastjack;
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length != 0 && args[0].equals("0")) { // Загрузка слов
+        if (args.length != 0 && args[0].equals("0")) {
             /* Обработка текстовых файлов, создание папок и разбиение блоков слов. */
             new FileHandler().processFiles();
-            /* Выход из приложения. */
             System.exit(0);
         } else if (args.length != 0 && args[0].equals("1")) {
             /* Удаление директории с данными */
             new FileHandler().cleanUp();
-            /* Выход из приложения. */
             System.exit(0);
         }
 
