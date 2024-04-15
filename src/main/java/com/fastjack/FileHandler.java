@@ -32,11 +32,11 @@ public class FileHandler {
         String separator = Utils.getFileSeparator();
         StringBuilder appDataDirectoryBuilder = new StringBuilder(Utils.constructDataPath());
 
-        String dataDirectoryPath = appDataDirectoryBuilder.toString(); // /home/.../appFolder/data
+        String dataDirectoryPath = appDataDirectoryBuilder.toString(); // ~/.cache/memorizing-words
         String pathToDirectory= appDataDirectoryBuilder.append(separator).append(fileNameNoExtension)
-                .toString(); // /home/.../appFolder/data/DoctorStrange
+                .toString(); // ~/.cache/memorizing-words/DoctorStrange
         String pathToTextBlocks = appDataDirectoryBuilder.append(separator).append("%s")
-                .toString(); // /home/.../appFolder/data/DoctorStrange/%s
+                .toString(); // ~/.cache/memorizing-words/DoctorStrange/%s
 
 
         /* Чтение файла */
@@ -71,19 +71,7 @@ public class FileHandler {
 
 
         /* Создание директорий и обработка данных. */
-        File dataDirectory = new File(dataDirectoryPath);
-        if (!dataDirectory.exists()) {
-            if (dataDirectory.mkdir()) {
-                System.out.println(
-                        "Директория для хранения ваших слов " + dataDirectoryPath + " была успешно создана\n"
-                );
-            } else {
-                throw new IllegalStateException(
-                        "Не удалось создать директорию " + dataDirectoryPath +
-                                ", попробуйте выбрать другую папку для программы"
-                );
-            }
-        }
+        createDirectoryRecursively(dataDirectoryPath); // Нужно убедиться, что папка для храненияпредсоздана
 
         if (rows.size() > 1 || (rows.size() == 1 && !rows.getFirst().isEmpty())) {
             if (new File(pathToDirectory).mkdir()) {
@@ -152,6 +140,25 @@ public class FileHandler {
                 throw new IllegalStateException(
                         "Произошла ошибка при написании или закрытии файла INFO.txt в директории " +
                                 pathToDirectory + ", удалите эту директорию и повторите запись txt файла снова"
+                );
+            }
+        }
+    }
+
+    private static void createDirectoryRecursively(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (!new File(directory.getParent()).exists()) {
+            createDirectoryRecursively(directory.getParent());
+        }
+        if (!directory.exists()) {
+            if (directory.mkdir()) {
+                System.out.println(
+                        "Директория для хранения ваших слов " + directoryPath + " была успешно создана\n"
+                );
+            } else {
+                throw new IllegalStateException(
+                        "Не удалось создать директорию " + directoryPath +
+                                ", попробуйте выбрать другую папку для программы"
                 );
             }
         }
