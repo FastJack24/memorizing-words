@@ -9,7 +9,13 @@ import java.util.stream.Stream;
 
 public class FileHandler {
 
-    public static void processFiles(String filePath) {
+    public void processFiles() {
+        System.out.println("Введите абсолютный путь к папке с файлами формата txt с форматированными словами:");
+        Scanner input = new Scanner(System.in);
+        String filePath = input.nextLine();
+        input.close();
+        System.out.println();
+
         File currentWorkingDirectory = new File(filePath);
         File[] txtFiles = currentWorkingDirectory.listFiles((dir, name) -> name.endsWith(".txt"));
 
@@ -26,7 +32,7 @@ public class FileHandler {
         System.out.println("Завершена обработка текстовых файлов слов из директории " + filePath);
     }
 
-    private static void createTextBlocks(File txtFile) {
+    private void createTextBlocks(File txtFile) {
         /* Обработка пути к приложению и построение пути до разбитых файлов */
         String fileNameNoExtension = txtFile.getName().split("\\.")[0]; // Имя файла без расширения
         String separator = Utils.getFileSeparator();
@@ -71,7 +77,7 @@ public class FileHandler {
 
 
         /* Создание директорий и обработка данных. */
-        createDirectoryRecursively(dataDirectoryPath); // Нужно убедиться, что папка для храненияпредсоздана
+        createDirectoryRecursively(dataDirectoryPath); // Нужно убедиться, что папка для хранения предсоздана
 
         if (rows.size() > 1 || (rows.size() == 1 && !rows.getFirst().isEmpty())) {
             if (new File(pathToDirectory).mkdir()) {
@@ -145,7 +151,7 @@ public class FileHandler {
         }
     }
 
-    private static void createDirectoryRecursively(String directoryPath) {
+    private void createDirectoryRecursively(String directoryPath) {
         File directory = new File(directoryPath);
         if (!new File(directory.getParent()).exists()) {
             createDirectoryRecursively(directory.getParent());
@@ -164,7 +170,7 @@ public class FileHandler {
         }
     }
 
-    public static void cleanUp() {
+    public void cleanUp() {
         try (Stream<Path> dataPath = Files.walk(Path.of(Utils.constructDataPath()))) {
             dataPath.sorted(Comparator.reverseOrder()).forEach(path -> {
                 try {

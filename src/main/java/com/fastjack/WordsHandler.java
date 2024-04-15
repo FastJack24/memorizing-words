@@ -111,11 +111,11 @@ public class WordsHandler {
             }
 
             blockRepeatState = true;
-            repeat();
+            revise();
         }
     }
 
-    private void repeat() {
+    private void revise() {
         while (blockRepeatState) {
             LinkedList<String> key = new LinkedList<>();
             HashMap<String, String> keyTranslation = new HashMap<>(); // Дефолтно перевод английский-русский

@@ -1,6 +1,5 @@
 package com.fastjack;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 
 public class Utils {
